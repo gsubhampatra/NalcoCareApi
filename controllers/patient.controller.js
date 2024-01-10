@@ -3,22 +3,21 @@ import { register } from './user.controller.js';
 
 const patientRegister = async (req, res) => {
  try {
-    const {username, password,name,email,details} = req.body;
-    if (!username || !password || !name || !email || !details) {
+    const { password,name,email,details} = req.body;
+    if (!password || !name || !email || !details) {
         res.status(400).json({
             success: false,
             message: "All Fields are required"
         })
-       await register(res,username,password,"patient")
-       const patient = new Patient({
-           username,
+       await register(res,email,password,"patient")
+       const patient = await new Patient({
            name,
            email,
            details
-       })
-         await patient.save()
+       }).save().select("-password")
             res.status(200).json({
                 success: true,
+                patient,
                 message: "Patient Registered Successfully"
             })
         
@@ -34,7 +33,7 @@ const patientRegister = async (req, res) => {
 
 const getPatient = async (req, res) => {
     try {
-        const patient = await Patient.findById(req.params.id)
+        const patient = await Patient.findById(req.params.id).select("-password")
         if (!patient) {
             res.status(404).json({
                 success: false,
@@ -57,4 +56,4 @@ const getPatient = async (req, res) => {
 
 
 
-export { patientRegister }
+export { patientRegister,getPatient }
