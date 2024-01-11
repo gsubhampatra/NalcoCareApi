@@ -2,8 +2,10 @@ import express from "express"
 import { DBConnect } from "./db.js"
 import cors from "cors"
 const app = express()
-import userRouter from "./routes/user.route.js"
-
+import userRoute from "./routes/user.route.js"
+import patientRoute from "./routes/patient.route.js"
+import doctorRoute from "./routes/doctor.route.js"
+// import adminRoute from "./routes/admin.route.js"
 app.use(express.json())
 app.use(cors({
     origin:"*"
@@ -19,7 +21,11 @@ app.get("/", (req, res) => {
     })
     }
     )
-app.get("/api/v1/auth",userRouter)    
+app.use("/api/v1/auth",userRoute)
+app.use("/api/v1/patient",patientRoute)
+app.use("/api/v1/doctor",doctorRoute)
+// app.use("/api/v1/admin",adminRoute)    
+
     
     app.listen(process.env.PORT || 8000, async() => {
        await DBConnect()

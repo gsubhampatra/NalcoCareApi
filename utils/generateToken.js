@@ -1,13 +1,17 @@
 import jwt from 'jsonwebtoken';
 
-const generateToken = (id) => {
+const generateToken = (user) => {
     try {
-        return jwt.sign({ id }, process.env.JWT_SECRET, {
+        const token =  jwt.sign({ userId:user._id,role:user.role,email:user.email },"nalcocare", {
             expiresIn: "30d"
         })
-        
+        if (!token) {
+            return {success:false,message:"Token not generated"}
+        }
+       
+        return {success:true,token}
     } catch (error) {
-        console.log(error.massage);
+        return {success:false,message:error.message}
     }
 }
 

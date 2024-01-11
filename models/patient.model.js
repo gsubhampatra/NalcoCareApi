@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 
 const PatientSchema = mongoose.Schema({
-    
+    userId:{
+       type:mongoose.Types.ObjectId,
+       ref:"User"
+    },
     name:{
         type:String,
         required:true,
@@ -9,11 +12,14 @@ const PatientSchema = mongoose.Schema({
     email:{
         type:String,
         required:true,
+        unique:true
     },
-    details:{
+    medHistory:{
         type:String,
         required:true,
     },
 },{timestamps:true})
 
-export default  Patient = mongoose.model("Patient",PatientSchema)
+ const  Patient = mongoose.model("Patient",PatientSchema)
+
+ export default Patient

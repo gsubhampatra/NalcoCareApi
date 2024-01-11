@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 
 const DoctorSchema = mongoose.Schema({
-    
+    userId:{
+        type:mongoose.Types.ObjectId,
+        ref:"User"
+     },
     name:{
         type:String,
         required:true,
@@ -20,4 +23,6 @@ const DoctorSchema = mongoose.Schema({
     }
 },{timestamps:true})
 
-export default  Doctor = mongoose.model("Doctor",DoctorSchema)
+ const  Doctor = mongoose.model("Doctor",DoctorSchema)
+
+ export default Doctor

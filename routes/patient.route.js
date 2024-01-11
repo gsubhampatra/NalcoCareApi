@@ -1,9 +1,10 @@
-import express from "express";
-import { getPatient } from "../controllers/patient.controller";
-
-const router = express()
-
-router.route("/get-patient/:id").get(getPatient)
+import { Router } from "express";
+import { getAllPatients, getPatient } from "../controllers/patient.controller.js";
 
 
-export default router
+const router = Router();
+
+router.route("/get-patient/:id").get(getPatient);
+router.route("/get-all-patients").get(getAllPatients);
+
+export default router;

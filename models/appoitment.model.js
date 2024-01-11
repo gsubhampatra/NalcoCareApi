@@ -15,7 +15,7 @@ const AppoitmentSchema = mongoose.Schema({
         type:String,
         required:true,
     },
-    time:{
+    slot:{
         type:String,
         required:true,
     },
@@ -30,4 +30,6 @@ const AppoitmentSchema = mongoose.Schema({
     },
 },{timestamps:true})
 
-export default  Appoitment = mongoose.model("Appoitment",AppoitmentSchema)
+ const  Appoitment = mongoose.model("Appoitment",AppoitmentSchema)
+
+ export default Appoitment

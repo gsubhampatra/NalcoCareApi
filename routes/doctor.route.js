@@ -1,6 +1,10 @@
-import express from "express";
-import { getDoctor } from "../controllers/doctor.controller";
+import { Router } from "express";
+import { getAllDoctors, getDoctor } from "../controllers/doctor.controller.js";
 
-const router = express()
 
-router.route("/get-doctor/:id").get(getDoctor)
+const router = Router();
+
+router.route("/get-doctor/:id").get(getDoctor);
+router.route("/get-all-doctors").get(getAllDoctors);
+
+export default router;
