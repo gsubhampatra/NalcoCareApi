@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const AppoitmentSchema = mongoose.Schema({
+const AppointmentSchema = mongoose.Schema({
     patient:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Patient",
@@ -30,6 +30,6 @@ const AppoitmentSchema = mongoose.Schema({
     },
 },{timestamps:true})
 
- const  Appoitment = mongoose.model("Appoitment",AppoitmentSchema)
+ const  Appointment = mongoose.model("Appointment",AppointmentSchema)
 
- export default Appoitment
+ export default Appointment

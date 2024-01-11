@@ -120,6 +120,8 @@ const login = async (req, res) => {
      const userId = (user._id).toHexString();
 
     const {token} = await generateToken(user);
+    res.cookie('token', token, { httpOnly: true });
+
      if (token.success==='false') {
       return res.status(400).json(token.message);
      }

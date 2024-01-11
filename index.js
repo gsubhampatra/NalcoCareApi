@@ -5,12 +5,14 @@ const app = express()
 import userRoute from "./routes/user.route.js"
 import patientRoute from "./routes/patient.route.js"
 import doctorRoute from "./routes/doctor.route.js"
+import cookieParser from "cookie-parser"
 // import adminRoute from "./routes/admin.route.js"
 app.use(express.json())
 app.use(cors({
     origin:"*"
 }))
 app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser());
 
 
 
