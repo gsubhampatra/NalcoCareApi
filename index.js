@@ -18,7 +18,7 @@ app.use(express.static('public'))
 
 
 app.get('/', (req, res) => {
-    res.sendFile('index.html', {root: path.join(__dirname, 'public')});
+    res.send({ success: true, message: "Welcome to NalcoCare API" })
   })
   
 app.use("/api/v1/auth",userRoute)
@@ -33,4 +33,4 @@ app.use("/api/v1/doctor",doctorRoute)
     }
 )
 
-module.exports = app
+export default app
