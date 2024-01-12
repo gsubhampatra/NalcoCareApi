@@ -82,7 +82,6 @@ const getDoctorAppointments = async (req, res) => {
 
 const ApproveAppointment = async (req, res) => {
     try {
-        const { doctorId } = req.body;
         const appointment = await Appointment.findById( req.params.id );
         if (!appointment) {
             return res.status(400).json({
@@ -93,7 +92,7 @@ const ApproveAppointment = async (req, res) => {
         appointment.status = "approved";
         await appointment.save();
         await Doctor.findOneAndUpdate(
-            { _id: doctorId },
+            { _id: appointment.doctor },
             { $pull: { availability: appointment.slot } },
             { new: true }
           );      
