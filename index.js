@@ -13,12 +13,11 @@ app.use(cors({
 }))
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
-app.use(express.static('public'))
 
 
 
 app.get('/', (req, res) => {
-    res.send({ success: true, message: "Welcome to NalcoCare API" })
+    res.send({ success: true, message: "Welcome to NALCOCare API" })
   })
   
 app.use("/api/v1/auth",userRoute)
