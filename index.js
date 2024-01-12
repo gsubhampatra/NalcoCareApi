@@ -9,7 +9,9 @@ import cookieParser from "cookie-parser"
 // import adminRoute from "./routes/admin.route.js"
 app.use(express.json())
 app.use(cors({
-    origin:"*"
+  origin: 'http://localhost:5173',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
 }))
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
