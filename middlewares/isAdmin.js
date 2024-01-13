@@ -2,7 +2,7 @@
 
 export const isAdmin = async (req, res, next) => {
     try {
-        const { user } = req.user
+        const  user  = req.user
         if (user.role === "admin") {
             next()
         }
