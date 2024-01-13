@@ -30,7 +30,7 @@ const register = async (req, res) => {
           role,
         });
 
-        const newUser = await user.save();
+        const newUser =  await user.save();
         if (!newUser) {
           return { success: false, message: "User not created" };
         }
@@ -110,6 +110,16 @@ const register = async (req, res) => {
           patient,
           token: user.token,
         });
+    }
+    if (role === "admin") {
+      const user = await userRegister(email, password, role);
+      if (!user.success) {
+        return res.status(400).json(user);
+      }
+      res.cookie("token", user.token, { httpOnly: true });
+      return res
+        .status(200)
+        .json({ success: true, message: "Admin created", user:user.newUser, token:user.token });
     }
   } catch (error) {
     res.status(500).json({
