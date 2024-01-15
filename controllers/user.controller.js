@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import Doctor from "../models/doctor.model.js";
 import Patient from "../models/patient.model.js";
 import generateToken from "../utils/generateToken.js";
+import sendMail from "../utils/sendMail.js";
 
 const register = async (req, res) => {
   try {
@@ -30,11 +31,17 @@ const register = async (req, res) => {
           role,
         });
 
-        const newUser =  await user.save();
+        const newUser = await user.save();
         if (!newUser) {
           return { success: false, message: "User not created" };
         }
         const { token } = generateToken(newUser);
+        await sendMail(
+          email,
+          "Welcome to our website",
+          `you registered as ${role}`
+        );
+
         return { success: true, newUser, token };
       } catch (error) {
         return { success: false, message: error.message };
@@ -66,15 +73,12 @@ const register = async (req, res) => {
           .json({ success: false, message: "Doctor not created" });
       }
       res.cookie("token", user.token, { httpOnly: true });
-
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message: "Doctor created",
-          doctor,
-          token: user.token,
-        });
+      return res.status(200).json({
+        success: true,
+        message: "Doctor created",
+        doctor,
+        token: user.token,
+      });
     }
     if (role === "patient") {
       if (!medHistory) {
@@ -102,14 +106,12 @@ const register = async (req, res) => {
           .json({ success: false, message: "Patient not created" });
       }
       res.cookie("token", user.token, { httpOnly: true });
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message: "Patient created",
-          patient,
-          token: user.token,
-        });
+      return res.status(200).json({
+        success: true,
+        message: "Patient created",
+        patient,
+        token: user.token,
+      });
     }
     if (role === "admin") {
       const user = await userRegister(email, password, role);
@@ -119,7 +121,12 @@ const register = async (req, res) => {
       res.cookie("token", user.token, { httpOnly: true });
       return res
         .status(200)
-        .json({ success: true, message: "Admin created", user:user.newUser, token:user.token });
+        .json({
+          success: true,
+          message: "Admin created",
+          user: user.newUser,
+          token: user.token,
+        });
     }
   } catch (error) {
     res.status(500).json({
@@ -146,7 +153,7 @@ const login = async (req, res) => {
         message: "Incorrect email or password",
       });
     }
-    
+
     const userId = user._id.toHexString();
 
     const { token } = await generateToken(user);
