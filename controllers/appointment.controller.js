@@ -94,6 +94,26 @@ const ApproveAppointment = async (req, res) => {
     });
   }
 };
+const RejectAppointment = async (req, res) => {
+  try {
+    const appointment = await Appointment.findById(req.params.id);
+    if (!appointment) {
+      return res.status(400).json({
+        success: false,
+        message: "Appointment not found",
+      });
+    }
+    appointment.status = "rejected";
+    await appointment.save();
+
+    return res.status(200).json({ success: true, appointment });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 const getAllAppointments = async (req, res) => {
   try {
@@ -119,4 +139,5 @@ export {
   getDoctorAppointments,
   ApproveAppointment,
   getAllAppointments,
+  RejectAppointment,
 };
