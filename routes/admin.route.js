@@ -8,7 +8,7 @@ const router = Router();
 
 router
   .route("/get-all-appointments")
-  .get(verifyToken, getAllAppointments);
+  .get( getAllAppointments);
 
 router.route("/delete-doctor/:id").delete(verifyToken, isAdmin, deleteDoctor);
 
