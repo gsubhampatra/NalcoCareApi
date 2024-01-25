@@ -189,9 +189,7 @@ const login = async (req, res) => {
         .status(200)
         .json({ success: true, message: "Admin logged in", token, user });
     }
-    // if (user.role !== ("admin" || "patient" || "doctor")) {
-    //   return res.status(400).json({ success: false, message: "Invalid role" });
-    // }
+    
   } catch (error) {
     res.status(500).json({
       success: false,
