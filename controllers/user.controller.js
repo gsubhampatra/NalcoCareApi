@@ -31,7 +31,7 @@ const register = async (req, res) => {
           role,
         });
 
-        const newUser = await user.save();
+        const newUser = await user.save().select('-password')
         if (!newUser) {
           return { success: false, message: "User not created" };
         }

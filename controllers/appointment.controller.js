@@ -35,7 +35,7 @@ const createAppointment = async (req, res) => {
 const getPatientAppointments = async (req, res) => {
   try {
     const { patientId } = req.body;
-    const appointments = await Appointment.find({ patient: patientId });
+    const appointments = await Appointment.find({ patient: patientId }).populate("doctor,patient");
     if (!appointments) {
       return res.status(400).json({
         success: false,
@@ -54,7 +54,7 @@ const getPatientAppointments = async (req, res) => {
 const getDoctorAppointments = async (req, res) => {
   try {
     const { doctorId } = req.body;
-    const appointments = await Appointment.find({ doctor: doctorId });
+    const appointments = await Appointment.find({ doctor: doctorId }).populate("doctor,patient");
     if (!appointments) {
       return res.status(400).json({
         success: false,
@@ -117,7 +117,7 @@ const RejectAppointment = async (req, res) => {
 
 const getAllAppointments = async (req, res) => {
   try {
-    const appointments = await Appointment.find({});
+    const appointments = await Appointment.find({}).populate("doctor,patient");
     if (!appointments) {
       return res.status(400).json({
         success: false,
