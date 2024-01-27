@@ -9,14 +9,14 @@ const verifyToken = async (req, res, next) => {
     if (!user) {
       res.status(400).json({
         success: false,
-        massage: "Not authonticated",
+        message: "Not authonticated",
       });
     }
     next();
   } catch (error) {
     res.status(400).json({
       success: false,
-      massage: error.massage,
+      message: error.message,
     });
   }
 };

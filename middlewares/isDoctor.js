@@ -10,7 +10,7 @@ export const isDoctor = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      massage: error.massage,
+      message: error.message,
     });
   }
 };
