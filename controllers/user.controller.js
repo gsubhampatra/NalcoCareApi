@@ -31,16 +31,11 @@ const register = async (req, res) => {
           role,
         });
 
-        const newUser = await user.save().select('-password')
+        const newUser = await user.save().select("-password");
         if (!newUser) {
           return { success: false, message: "User not created" };
         }
         const { token } = generateToken(newUser);
-        await sendMail(
-          email,
-          "Welcome to our website",
-          `you registered as ${role}`
-        );
 
         return { success: true, newUser, token };
       } catch (error) {
@@ -55,14 +50,12 @@ const register = async (req, res) => {
           message: "Missing specilization",
         });
       }
-      const user = await userRegister(email, password, role);
-      if (!user.success) {
-        return res.status(400).json(user);
+      const data = await userRegister(email, password, role);
+      if (!data.success) {
+        return res.status(400).json(data);
       }
-      const userId = (user?.newUser?._id).toHexString();
 
       const doctor = await new Doctor({
-        userId,
         name,
         email,
         specilization,
@@ -72,12 +65,18 @@ const register = async (req, res) => {
           .status(400)
           .json({ success: false, message: "Doctor not created" });
       }
-      res.cookie("token", user.token, { httpOnly: true });
+      res.cookie("token", data.token, { httpOnly: true });
       return res.status(200).json({
         success: true,
         message: "Doctor created",
-        doctor,
-        token: user.token,
+        user: {
+          name: doctor.name,
+          email: doctor.email,
+          role: data.newUser.role,
+          specilization: doctor.specilization,
+          availability: doctor.availability,
+        },
+        token: data.token,
       });
     }
     if (role === "patient") {
@@ -88,14 +87,12 @@ const register = async (req, res) => {
         });
       }
 
-      const user = await userRegister(email, password, role);
-      if (!user.success) {
-        return res.status(400).json(user);
+      const data = await userRegister(email, password, role);
+      if (!data.success) {
+        return res.status(400).json(data);
       }
-      const userId = (user?.newUser?._id).toHexString();
 
       const patient = await new Patient({
-        userId,
         name,
         email,
         medHistory,
@@ -105,28 +102,35 @@ const register = async (req, res) => {
           .status(400)
           .json({ success: false, message: "Patient not created" });
       }
-      res.cookie("token", user.token, { httpOnly: true });
+      res.cookie("token", data.token, { httpOnly: true });
       return res.status(200).json({
         success: true,
         message: "Patient created",
-        patient,
-        token: user.token,
+        user: {
+          name: patient.name,
+          email: patient.email,
+          role: "patient",
+          medHistory: patient.medHistory,
+        },
+        token: data.token,
       });
     }
     if (role === "admin") {
-      const user = await userRegister(email, password, role);
-      if (!user.success) {
-        return res.status(400).json(user);
+      const data = await userRegister(email, password, role);
+      if (!data.success) {
+        return res.status(400).json(data);
       }
-      res.cookie("token", user.token, { httpOnly: true });
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message: "Admin created",
-          user: user.newUser,
-          token: user.token,
-        });
+      res.cookie("token", data.token, { httpOnly: true });
+      return res.status(200).json({
+        success: true,
+        message: "Admin created",
+        user: {
+          name: data.newUser.name,
+          email: data.newUser.email,
+          role: data.newUser.role,
+        },
+        token: data.token,
+      });
     }
   } catch (error) {
     res.status(500).json({
@@ -154,42 +158,18 @@ const login = async (req, res) => {
       });
     }
 
-    const userId = user._id.toHexString();
-
-    const { token } = await generateToken(user);
-    res.cookie("token", token, { httpOnly: true });
+    const token = await generateToken(user);
 
     if (token.success === "false") {
       return res.status(400).json(token.message);
     }
-    if (user.role === "doctor") {
-      const doctor = await Doctor.findOne({ userId });
-      if (!doctor) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Doctor not found" });
-      }
-      return res
-        .status(200)
-        .json({ success: true, message: "Doctor logged in", token, doctor });
-    }
-    if (user.role === "patient") {
-      const patient = await Patient.findOne({ userId });
-      if (!patient) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Patient not found" });
-      }
-      return res
-        .status(200)
-        .json({ success: true, message: "Patient logged in", token, patient });
-    }
-    if (user.role === "admin") {
-      return res
-        .status(200)
-        .json({ success: true, message: "Admin logged in", token, user });
-    }
-    
+    res.cookie("token", token.token, { httpOnly: true });
+    res.status(200).json({
+      success: true,
+      message: "logged in successfully",
+      user,
+      token: token.token,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,

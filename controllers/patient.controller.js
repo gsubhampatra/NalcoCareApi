@@ -3,7 +3,7 @@ import Patient from "../models/patient.model.js";
 
 const getPatient = async (req, res) => {
     try {
-        const patient = await Patient.findOne({ userId: req.params.id });
+        const patient = await Patient.findOne({ email: req.params.id });
         if (!patient) {
             return res.status(400).json({
                 success: false,

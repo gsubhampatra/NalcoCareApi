@@ -3,7 +3,7 @@ import Appointment from "../models/appointment.model.js";
 
 const getDoctor = async (req, res) => {
     try {
-        const doctor = await Doctor.findOne({ userId: req.params.id });
+        const doctor = await Doctor.findOne({ email: req.params.id });
         if (!doctor) {
             return res.status(400).json({
                 success: false,
