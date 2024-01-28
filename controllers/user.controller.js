@@ -31,7 +31,7 @@ const register = async (req, res) => {
           role,
         });
 
-        const newUser = await user.save().select("-password");
+        const newUser = await user.save()
         if (!newUser) {
           return { success: false, message: "User not created" };
         }
@@ -167,7 +167,11 @@ const login = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "logged in successfully",
-      user,
+      user: {
+        _id: user._id,
+        email: user.email,
+        role: user.role,
+      },
       token: token.token,
     });
   } catch (error) {
