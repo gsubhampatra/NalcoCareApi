@@ -12,7 +12,10 @@ const getPatient = async (req, res) => {
     return res.status(200).json({
       success: true,
       user: {
-        ...patient,
+        _id: patient._id,
+        name: patient.name,
+        email: patient.email,
+        medHistory: patient.medHistory,
         role: "patient",
       },
     });
