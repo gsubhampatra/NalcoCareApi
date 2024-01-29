@@ -70,6 +70,7 @@ const register = async (req, res) => {
         success: true,
         message: "Doctor created",
         user: {
+          _id: doctor._id,
           name: doctor.name,
           email: doctor.email,
           role: data.newUser.role,
@@ -107,6 +108,7 @@ const register = async (req, res) => {
         success: true,
         message: "Patient created",
         user: {
+          _id: patient._id,
           name: patient.name,
           email: patient.email,
           role: "patient",
@@ -125,6 +127,7 @@ const register = async (req, res) => {
         success: true,
         message: "Admin created",
         user: {
+          _id: data.newUser._id,
           name: data.newUser.name,
           email: data.newUser.email,
           role: data.newUser.role,
