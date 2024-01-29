@@ -14,7 +14,11 @@ const getDoctor = async (req, res) => {
       success: true,
       user: {
         role: "doctor",
-        ...doctor,
+        name: doctor.nsme,
+        _id: doctor._id,
+        email:doctor.email,
+        specilization:doctor.specilization,
+        availability: doctor.availability
       },
     });
   } catch (error) {
