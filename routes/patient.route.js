@@ -14,7 +14,7 @@ const router = Router();
 router.route("/get-patient/:id").get(getPatient);
 router.route("/get-all-patients").get(getAllPatients);
 
-router.route("/create-appoinment").post(verifyToken, createAppointment);
+router.route("/create-appoinment").post(createAppointment);
 router
   .route("/get-patient-appointments/:id")
   .get(verifyToken, getPatientAppointments);
