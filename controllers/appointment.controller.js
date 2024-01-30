@@ -124,8 +124,8 @@ const RejectAppointment = async (req, res) => {
 const getAllAppointments = async (req, res) => {
   try {
     const appointments = await Appointment.find({})
-      .populate("doctor")
-      .populate("patient")
+      .populate("doctor","name email")
+      .populate("patient","name email")
       .exec();
     if (!appointments) {
       return res.status(400).json({
@@ -146,6 +146,21 @@ const getAllAppointments = async (req, res) => {
   }
 };
 
+const deleteAppointment = async(req,res)=>{
+  try {
+    const appointment = await Appointment.findByIdAndDelete(req.params.id)
+    res.status(200).json({
+      success:true,
+      message:"Appointment deleted Successfully"
+    })
+  } catch (error) {
+    res.status(400).json({
+      success:false,
+      message:error.message
+    })
+  }
+}
+
 export {
   createAppointment,
   getPatientAppointments,
@@ -153,4 +168,5 @@ export {
   ApproveAppointment,
   getAllAppointments,
   RejectAppointment,
+  deleteAppointment
 };
