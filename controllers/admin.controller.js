@@ -1,5 +1,6 @@
 import Doctor from "../models/doctor.model.js";
 import Patient from "../models/patient.model.js";
+import User from "../models/user.model.js";
 
 const deleteDoctor = async(req,res)=>{
     try {
