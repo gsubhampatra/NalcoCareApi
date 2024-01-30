@@ -6,13 +6,14 @@ const verifyToken = async (req, res, next) => {
     const JWT_SECRET = process.env.JWT_SECRET || "nalcocare";
     const decodedToken = jwt.verify(token, JWT_SECRET);
     const user = await User.findById(decodedToken.userId);
-    if (!user) {
-      res.status(400).json({
+    if (user) {
+      next();
+    } else {
+      res.status(401).json({
         success: false,
-        message: "Not authonticated",
+        message: "Unauthorized",
       });
     }
-    next();
   } catch (error) {
     res.status(400).json({
       success: false,
